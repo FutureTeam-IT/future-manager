@@ -1,0 +1,3 @@
+class CommandManager {}
+
+export { CommandManager };

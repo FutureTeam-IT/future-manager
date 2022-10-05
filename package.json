@@ -35,6 +35,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "ahocon": "^0.1.8",
     "bufferutil": "^4.0.6",
     "discord.js": "^14.5.0",
     "erlpack": "discord/erlpack",
