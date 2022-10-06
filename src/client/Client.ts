@@ -1,33 +1,42 @@
-import fs from "fs";
-import hocon from "ahocon";
-import Discord from "discord.js";
-import { IConfiguration } from "../models/Configuration";
+import fs from 'fs';
+import hocon from 'ahocon';
+import Discord from 'discord.js';
+import { IConfiguration } from '../models/Configuration';
+import { CommandManager } from './CommandManager';
 
 type ClientOptions = Discord.ClientOptions & {
   path: string;
 };
 
 class Client<
-  T extends IConfiguration,
-  Ready extends boolean = boolean
+  T extends IConfiguration = IConfiguration,
+  Ready extends boolean = boolean,
 > extends Discord.Client<Ready> {
   readonly #config: T;
+  readonly #commandManager: CommandManager;
 
   constructor({ path, ...options }: ClientOptions) {
     super(options);
 
     // configuration
-    const data = fs.readFileSync(path, { encoding: "utf-8" });
+    const data = fs.readFileSync(path, { encoding: 'utf-8' });
     this.#config = hocon.parse<T>(data);
+
+    // managers
+    this.#commandManager = new CommandManager(this);
   }
 
   get config(): Readonly<T> {
     return this.#config;
   }
 
-  start() {
-	// * Add commands logic
-    this.login(this.#config.token);
+  get managers() {
+    return { command: this.#commandManager };
+  }
+
+  async start() {
+    await this.#commandManager.update();
+    this.login(this.#config.application.token);
   }
 }
 

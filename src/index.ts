@@ -15,7 +15,7 @@ const main = async () => {
     },
   });
 
-  client.start();
+  await client.start();
 };
 
-main();
+// main();

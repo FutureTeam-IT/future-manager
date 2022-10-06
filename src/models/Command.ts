@@ -1,5 +1,13 @@
+import { CommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { Client } from '../client/Client';
+
 interface ICommand {
-	execute(...args: any[]): PromiseLike<void>;
+  get name(): string;
+
+  execute(client: Client, ctx: CommandInteraction<"cached">): PromiseLike<void>;
+  builder(): PromiseLike<SlashCommandBuilder>;
 }
 
-export { ICommand };
+type CommandData = ReturnType<SlashCommandBuilder["toJSON"]>;
+
+export { ICommand, CommandData };
