@@ -1,8 +1,9 @@
 import fs from 'fs';
 import hocon from 'ahocon';
-import Discord from 'discord.js';
+import Discord, { ClientEvents } from 'discord.js';
 import { IConfiguration } from '../models/Configuration';
 import { CommandManager } from './CommandManager';
+import { Listener } from '../models/Listener';
 
 type ClientOptions = Discord.ClientOptions & {
   path: string;
@@ -37,6 +38,13 @@ class Client<
   async start() {
     await this.#commandManager.update();
     this.login(this.#config.application.token);
+  }
+
+  listen<K extends keyof ClientEvents>(event: K, listener: Listener<K>) {
+    this[listener.once ? 'once' : 'on'](
+      event,
+      listener.on.bind(listener, this),
+    );
   }
 }
 
