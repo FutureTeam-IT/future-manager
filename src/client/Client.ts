@@ -36,7 +36,7 @@ class Client<
   }
 
   async start() {
-    await this.#commandManager.update();
+    await this.#commandManager.register();
     this.login(this.#config.application.token);
   }
 

@@ -1,16 +1,18 @@
 import { CommandInteraction, Interaction, REST, Routes } from 'discord.js';
 import { CommandData, ICommand } from '../models/Command';
+import { Listener } from '../models/Listener';
 import { Client } from './Client';
 
-class CommandManager {
+class CommandManager implements Listener<'interactionCreate'> {
   readonly #commands: Map<string, ICommand>;
   readonly #rest: REST;
+  readonly once = false;
 
   constructor(private readonly client: Client) {
     this.#commands = new Map();
     this.#rest = new REST({ version: '10' });
 
-    client.on('interactionCreate', this.route);
+    client.listen('interactionCreate', this);
     this.#rest.setToken(client.config.application.token);
   }
 
@@ -35,15 +37,11 @@ class CommandManager {
     return data;
   }
 
-  register(command: ICommand) {
+  add(command: ICommand) {
     this.#commands.set(command.name, command);
   }
 
-  registerAll(commands: Array<ICommand>) {
-    commands.forEach((cmd) => this.#commands.set(cmd.name, cmd));
-  }
-
-  async update() {
+  async register() {
     const body = await this.build();
 
     return await this.#rest.put(
@@ -55,7 +53,7 @@ class CommandManager {
     );
   }
 
-  async route(interaction: Interaction) {
+  async on(_, interaction: Interaction) {
     if (!interaction.isChatInputCommand() || !interaction.inCachedGuild()) {
       return;
     }
