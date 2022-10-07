@@ -45,6 +45,7 @@ class ServerCommand implements ICommand {
     const embed = new EmbedBuilder()
       .setTitle('FutureCraft | Server')
       .setDescription('Qui trovi le informazioni generali sul server.')
+      .setThumbnail(client.user.defaultAvatarURL)
       .setColor("#6cdae7")
       .addFields(
         { name: 'Piattaforma', value: 'Java', inline: true },

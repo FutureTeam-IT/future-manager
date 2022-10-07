@@ -4,6 +4,7 @@ import Discord, { ClientEvents } from 'discord.js';
 import { IConfiguration } from '../models/Configuration';
 import { CommandManager } from './CommandManager';
 import { Listener } from '../models/Listener';
+import { PrismaClient } from '@prisma/client';
 
 type ClientOptions = Discord.ClientOptions & {
   path: string;
@@ -15,6 +16,7 @@ class Client<
 > extends Discord.Client<Ready> {
   readonly #config: T;
   readonly #commandManager: CommandManager;
+  readonly #db: PrismaClient;
 
   constructor({ path, ...options }: ClientOptions) {
     super(options);
@@ -25,6 +27,8 @@ class Client<
 
     // managers
     this.#commandManager = new CommandManager(this);
+
+    this.#db = new PrismaClient();
   }
 
   get config(): Readonly<T> {
@@ -33,6 +37,10 @@ class Client<
 
   get managers() {
     return { command: this.#commandManager };
+  }
+
+  get database(): Omit<PrismaClient, `$${string}`> {
+    return this.#db;
   }
 
   async start() {
