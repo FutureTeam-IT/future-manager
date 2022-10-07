@@ -9,6 +9,7 @@ import {
   ButtonStyle,
   ComponentType,
   ChannelType,
+  channelMention,
 } from 'discord.js';
 import { IConfiguration } from '../models/Configuration';
 import { IListener } from '../models/Listener';
@@ -54,7 +55,9 @@ class TicketManager implements IListener<'interactionCreate'> {
 
   readonly once: boolean = false;
 
-  constructor(private readonly client: Client<IConfiguration, true>) {}
+  constructor(private readonly client: Client<IConfiguration, boolean>) {
+    client.listen('interactionCreate', this);
+  }
 
   inTicketChannel(interaction: ButtonInteraction<'cached'>) {
     return (
@@ -115,12 +118,19 @@ class TicketManager implements IListener<'interactionCreate'> {
       type: ChannelType.GuildText,
     });
 
+    interaction.reply({
+      ephemeral: true,
+      content: `Ticket creato con successo!\nRecati al canale ${channelMention(
+        channel.id,
+      )} e descrivi il tuo problema!`,
+    });
+
     const messages = channel.createMessageCollector({
       filter: (m) => !m.author.bot,
     });
 
-    messages.on('collect', (message) => {
-      this.client.database.ticketMessage.create({
+    messages.on('collect', async (message) => {
+      await this.client.database.ticketMessage.create({
         data: {
           author_id: message.author.id,
           text: message.content,
@@ -141,9 +151,9 @@ class TicketManager implements IListener<'interactionCreate'> {
 
     closeRequests.on('collect', async (btn) => {
       const confirm = await btn.reply({
-        ephemeral: true,
         embeds: [TicketManager.CONFIRM_CLOSE_EMBED],
         components: [TicketManager.CONFIRM_BUTTONS],
+        fetchReply: true
       });
 
       try {
@@ -153,20 +163,22 @@ class TicketManager implements IListener<'interactionCreate'> {
         });
 
         if (reply.customId === 'ticket:confirm') {
+          console.log("inside if")
+
           await this.client.database.ticket.update({
             data: { closed_at: new Date() },
-            where: { id: parseInt(channel.name.substring(0, 7)) },
+            where: { id: parseInt(channel.name.substring(7)) },
           });
 
           await channel.delete();
           return;
         }
         await btn.deleteReply();
-      } catch {
+      } catch(e) {
         await btn.deleteReply();
       }
     });
   }
 }
 
-export { TicketManager as TickerManager };
+export { TicketManager };

@@ -28,7 +28,7 @@ class MessageCreateEvent implements IListener<'messageCreate'> {
       return;
     }
 
-    const flatContent = MessageCreateEvent.escapeFormat(previous.content);
+    const flatContent = MessageCreateEvent.escapeFormat(message.content);
     const flatPreviousContent = MessageCreateEvent.escapeFormat(
       previous.content,
     );

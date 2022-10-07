@@ -1,10 +1,11 @@
 import fs from 'fs';
-import hocon from 'ahocon';
+import * as hocon from 'ahocon';
 import Discord, { ClientEvents } from 'discord.js';
 import { IConfiguration } from '../models/Configuration';
 import { CommandManager } from './CommandManager';
-import { Listener } from '../models/Listener';
+import { IListener } from '../models/Listener';
 import { PrismaClient } from '@prisma/client';
+import { TicketManager } from './TicketManager';
 
 type ClientOptions = Discord.ClientOptions & {
   path: string;
@@ -16,6 +17,7 @@ class Client<
 > extends Discord.Client<Ready> {
   readonly #config: T;
   readonly #commandManager: CommandManager;
+  readonly #ticketManager: TicketManager;
   readonly #db: PrismaClient;
 
   constructor({ path, ...options }: ClientOptions) {
@@ -27,6 +29,7 @@ class Client<
 
     // managers
     this.#commandManager = new CommandManager(this);
+    this.#ticketManager = new TicketManager(this);
 
     this.#db = new PrismaClient();
   }
@@ -36,7 +39,10 @@ class Client<
   }
 
   get managers() {
-    return { command: this.#commandManager };
+    return {
+      command: this.#commandManager,
+      ticket: this.#ticketManager
+    };
   }
 
   get database(): Omit<PrismaClient, `$${string}`> {
@@ -48,7 +54,7 @@ class Client<
     this.login(this.#config.application.token);
   }
 
-  listen<K extends keyof ClientEvents>(event: K, listener: Listener<K>) {
+  listen<K extends keyof ClientEvents>(event: K, listener: IListener<K>) {
     this[listener.once ? 'once' : 'on'](
       event,
       listener.on.bind(listener, this),
