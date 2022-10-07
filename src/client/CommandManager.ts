@@ -1,9 +1,9 @@
 import { CommandInteraction, Interaction, REST, Routes } from 'discord.js';
 import { CommandData, ICommand } from '../models/Command';
-import { Listener } from '../models/Listener';
+import { IListener } from '../models/Listener';
 import { Client } from './Client';
 
-class CommandManager implements Listener<'interactionCreate'> {
+class CommandManager implements IListener<'interactionCreate'> {
   readonly #commands: Map<string, ICommand>;
   readonly #rest: REST;
   readonly once = false;

@@ -11,10 +11,10 @@ import {
   ChannelType,
 } from 'discord.js';
 import { IConfiguration } from '../models/Configuration';
-import { Listener } from '../models/Listener';
+import { IListener } from '../models/Listener';
 import { Client } from './Client';
 
-class TicketManager implements Listener<'interactionCreate'> {
+class TicketManager implements IListener<'interactionCreate'> {
   static readonly NEW_TICKET_EMBED = new EmbedBuilder()
     .setTitle('Ticket Aperto')
     .setDescription(
