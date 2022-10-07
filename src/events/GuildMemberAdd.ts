@@ -21,19 +21,19 @@ class GuildMemberAddEvent implements IListener<'guildMemberAdd'> {
     if (!channel) return;
 
     await channel.send(`
-    **●▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●**
-		Benvenuto ${bold(userMention(member.id))} in ${bold('FutureCraft')}!
-		Assicurati di leggere le regole in ${channelMention(
-      member.guild.rulesChannelId ?? '',
-    )} 
-    Per qualsiasi notizia circa il network le trovi in ${channelMention(
-      client.config.guild.channels.announcements,
-    )}
-    Se hai bisogno di assistenza apri un ticket in ${channelMention(
-      client.config.ticket.channel,
-    )}
-		Utilizza il comando ${inlineCode('/server')} per avere informazioni sul server.
-	  **●▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●**
+**●▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●**
+   Benvenuto ${bold(userMention(member.id))} in ${bold('FutureCraft')}!
+   Assicurati di leggere le regole in ${channelMention(
+     member.guild.rulesChannelId ?? '',
+   )} 
+   Per qualsiasi notizia circa il network le trovi in ${channelMention(
+     client.config.guild.channels.announcements,
+   )}
+   Se hai bisogno di assistenza apri un ticket in ${channelMention(
+     client.config.ticket.channel,
+   )}
+   Utilizza il comando ${inlineCode('/server')} per avere informazioni sul server.
+**●▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●**
 		`);
   }
 }
