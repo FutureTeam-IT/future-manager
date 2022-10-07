@@ -30,9 +30,9 @@ class InfoCommand implements ICommand {
     ctx: CommandInteraction<'cached'>,
   ) {
     const embed = new EmbedBuilder()
-      .setTitle('Iglesias Manager')
+      .setTitle('Future Manager')
       .setDescription(
-        'Iglesias Manager è il bot ufficiale del server discord di IglesiasCraft.',
+        'Future Manager è il bot ufficiale del server discord di FutureCraft.',
       )
       .setThumbnail(client.user.displayAvatarURL())
       .addFields([
@@ -54,4 +54,4 @@ class InfoCommand implements ICommand {
   }
 }
 
-export default InfoCommand;
+export { InfoCommand };

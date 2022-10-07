@@ -96,4 +96,4 @@ class ServerCommand implements ICommand {
   }
 }
 
-export default ServerCommand;
+export { ServerCommand };

@@ -1,8 +1,8 @@
 import { ActivityType, IntentsBitField } from 'discord.js';
 
 import { Client } from './client/Client';
-import InfoCommand from './commands/Info';
-import ServerCommand from './commands/Server';
+import { InfoCommand } from './commands/Info';
+import { ServerCommand } from './commands/Server';
 import { GuildMemberAddEvent } from './events/GuildMemberAdd';
 import { MessageCreateEvent } from './events/MessageCreate';
 import { ReadyEvent } from './events/Ready';
