@@ -62,3 +62,5 @@ class VoiceStateUpdateEvent implements IListener<'voiceStateUpdate'> {
     await member.voice.setChannel(newChannel);
   }
 }
+
+export { VoiceStateUpdateEvent }
