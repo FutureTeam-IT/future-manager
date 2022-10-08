@@ -114,8 +114,12 @@ class TicketManager implements IListener<'interactionCreate'> {
     const channel = await guild.channels.create({
       name: `ticket-${ticket.id}`,
       parent: this.client.config.ticket.category,
-      permissionOverwrites: [{ id: user.id, allow: ['ViewChannel'] }],
+      // permissionOverwrites: [{ id: user.id, allow: ['ViewChannel'] }],
       type: ChannelType.GuildText,
+    });
+
+    await channel.permissionOverwrites.create(user.id, {
+      ViewChannel: true,
     });
 
     interaction.reply({
@@ -163,8 +167,6 @@ class TicketManager implements IListener<'interactionCreate'> {
         });
 
         if (reply.customId === 'ticket:confirm') {
-          console.log("inside if")
-
           await this.client.database.ticket.update({
             data: { closed_at: new Date() },
             where: { id: parseInt(channel.name.substring(7)) },

@@ -22,7 +22,7 @@ const main = async () => {
   ];
 
   const client = new Client({
-    path: 'application.conf',
+    path: 'application.copy.conf',
     intents,
     presence: {
       status: 'dnd',
@@ -30,10 +30,11 @@ const main = async () => {
     },
   });
 
-  client.managers.command.add(new InfoCommand());
-  client.managers.command.add(new ServerCommand());
-  client.managers.command.add(new TellCommand());
-  client.managers.command.add(new AnnounceCommand());
+  const CommandManager = client.managers.command;
+  CommandManager.add(new InfoCommand());
+  CommandManager.add(new ServerCommand());
+  CommandManager.add(new TellCommand());
+  CommandManager.add(new AnnounceCommand());
 
   client.listen('ready', new ReadyEvent());
   client.listen('guildMemberAdd', new GuildMemberAddEvent());

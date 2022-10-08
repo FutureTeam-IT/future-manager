@@ -28,7 +28,7 @@ class ReadyEvent implements IListener<'ready'> {
             'Hai bisogno di assistenza?\nDevi fare qualche segnalazione?\nApri un ticket per parlare con lo staff.',
           )
           .setColor(0xda70d6)
-          .setThumbnail(client.user.defaultAvatarURL);
+          .setThumbnail(client.user.displayAvatarURL());
 
         const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
           new ButtonBuilder()

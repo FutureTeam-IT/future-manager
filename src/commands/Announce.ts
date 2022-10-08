@@ -60,7 +60,7 @@ class AnnounceCommand implements ICommand {
 
     const announcement = new EmbedBuilder()
       .setTitle(title)
-      .setDescription(description)
+      .setDescription(description.replaceAll("\\n", "\n"))
       .setAuthor({
         name: ctx.user.username,
         iconURL: ctx.user.displayAvatarURL(),
@@ -100,7 +100,7 @@ class AnnounceCommand implements ICommand {
       .awaitMessageComponent({
         filter: (i) => i.user.id === ctx.user.id,
         componentType: ComponentType.Button,
-        time: 10_000,
+        time: 30_000,
       })
       .then(async (action) => {
         if (action.customId === 'announce-send') {

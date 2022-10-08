@@ -54,9 +54,14 @@ class VoiceStateUpdateEvent implements IListener<'voiceStateUpdate'> {
       name: member.displayName,
       parent: category?.id,
       type: ChannelType.GuildVoice,
-      permissionOverwrites: [
-        { id: member.id, allow: ['Connect', 'ManageRoles'] },
-      ],
+      // permissionOverwrites: [
+      //   { id: member.id, allow: ['Connect', 'ManageRoles'] },
+      // ],
+    });
+
+    await newChannel.permissionOverwrites.create(member.id, {
+      Connect: true,
+      ManageRoles: true
     });
 
     await member.voice.setChannel(newChannel);
