@@ -1,11 +1,13 @@
 import fs from 'fs';
 import * as hocon from 'ahocon';
-import Discord, { ClientEvents } from 'discord.js';
-import { IConfiguration } from '../models/Configuration';
-import { CommandManager } from './CommandManager';
-import { IListener } from '../models/Listener';
 import { PrismaClient } from '@prisma/client';
+import Discord, { ClientEvents } from 'discord.js';
+
+import { IListener } from '../models/Listener';
 import { TicketManager } from './TicketManager';
+import { CommandManager } from './CommandManager';
+import { IConfiguration } from '../models/Configuration';
+import { ContextMenuManager } from './ContextMenuManager';
 
 type ClientOptions = Discord.ClientOptions & {
   path: string;
@@ -18,6 +20,7 @@ class Client<
   readonly #config: T;
   readonly #commandManager: CommandManager;
   readonly #ticketManager: TicketManager;
+  readonly #contextMenuManager: ContextMenuManager;
   readonly #db: PrismaClient;
 
   constructor({ path, ...options }: ClientOptions) {
@@ -30,6 +33,7 @@ class Client<
     // managers
     this.#commandManager = new CommandManager(this);
     this.#ticketManager = new TicketManager(this);
+    this.#contextMenuManager = new ContextMenuManager(this);
 
     this.#db = new PrismaClient();
   }
@@ -41,7 +45,8 @@ class Client<
   get managers() {
     return {
       command: this.#commandManager,
-      ticket: this.#ticketManager
+      ticket: this.#ticketManager,
+      contextMenu: this.#contextMenuManager,
     };
   }
 
@@ -50,7 +55,10 @@ class Client<
   }
 
   async start() {
-    await this.#commandManager.register();
+    await Promise.all([
+      this.#commandManager.register(),
+      this.#contextMenuManager.register(),
+    ]);
     this.login(this.#config.application.token);
   }
 

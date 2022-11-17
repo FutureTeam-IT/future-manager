@@ -42,6 +42,8 @@ class ReadyEvent implements IListener<'ready'> {
           components: [row],
         });
       }
+
+      console.log("\x1b[32mBot ready!");
     }
   }
 }

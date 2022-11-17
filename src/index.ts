@@ -11,6 +11,7 @@ import { GuildMemberAddEvent } from './events/GuildMemberAdd';
 import { MessageCreateEvent } from './events/MessageCreate';
 import { ReadyEvent } from './events/Ready';
 import { VoiceStateUpdateEvent } from './events/VoiceStateUpdate';
+import { TicketMenu } from './menus/Ticket';
 
 const main = async () => {
   const intents = [
@@ -35,6 +36,9 @@ const main = async () => {
   CommandManager.add(new ServerCommand());
   CommandManager.add(new TellCommand());
   CommandManager.add(new AnnounceCommand());
+
+  const ContextMenuManager = client.managers.contextMenu;
+  ContextMenuManager.add(new TicketMenu());
 
   client.listen('ready', new ReadyEvent());
   client.listen('guildMemberAdd', new GuildMemberAddEvent());
