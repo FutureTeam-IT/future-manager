@@ -36,17 +36,4 @@ abstract class MessageContextMenu implements IContextMenu<MessageContextMenuComm
 	}
 }
 
-// abstract class UserContextMenu implements IContextMenu<UserContextMenuCommandInteraction> {
-// 	constructor (public name: string, private defaultPermission: boolean) {}
-
-// 	abstract execute(client: Client<IConfiguration, true>, ctx: UserContextMenuCommandInteraction<CacheType>): Awaitable<void>;
-
-// 	builder(): ContextMenuCommandBuilder {
-// 		return new ContextMenuCommandBuilder()
-// 			.setName(this.name)
-// 			.setType(ApplicationCommandType.User)
-// 			.setDefaultMemberPermissions(this.defaultPermission ? undefined : '0');
-// 	}
-// }
-
 export { IContextMenu, UserContextMenu, MessageContextMenu, ContextMenuData }
